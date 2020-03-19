@@ -10,8 +10,8 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  void setup() async{
-    GetTime timer = GetTime(location: 'India', zone: 'Asia/Kolkata');
+  void setup({String location = 'India' ,String zone = 'Asia/Kolkata'}) async{
+    GetTime timer = GetTime(location: location, zone: zone);
     await timer.getTime();
     setState(() {
       Navigator.of(context).pushReplacementNamed('/home', arguments: {'time': timer.time, 'location': timer.location});
@@ -26,6 +26,11 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
+    Map data = ModalRoute.of(context).settings.arguments;
+    if(data != null)
+      {
+        setup(location : data['location'], zone : data['timezone']);
+      }
     return Scaffold(
       body: Center(
           child: SpinKitDoubleBounce(

@@ -36,7 +36,11 @@ class _LocationState extends State<Location> {
             return Card(
               color: Colors.deepPurpleAccent,
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    Navigator.of(context).pushReplacementNamed('/', arguments: {'timezone' : tz.timezones[index], 'location' : tz.locations[index]});
+                  });
+                },
                 title: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text('${tz.locations[index]}', style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.2, fontWeight: FontWeight.w300),),

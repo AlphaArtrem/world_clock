@@ -16,6 +16,14 @@ class TimeZones{
               }
           }
         locations.add(timezones[i].substring(j + 1, zone + 1));
+        int location = locations[i].length - 1;
+        for(j = 0; j <= location; j++)
+          {
+            if(locations[i][j] == '_')
+              {
+                locations[i] = locations[i].substring(0, j) + ' ' + locations[i].substring(j + 1);
+              }
+          }
       }
   }
 }
