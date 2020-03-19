@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:worldclock/src/timezones.dart';
+import 'package:worldclock/src/get_time.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -12,6 +13,15 @@ class _LocationState extends State<Location> {
 
   void setup() async{
     tz.getTimeZones();
+  }
+
+  void newTime(index) async {
+    GetTime timer = GetTime(location: tz.locations[index], zone: tz.timezones[index]);
+    await timer.getTime();
+    setState(() {
+      Navigator.of(context).pushReplacementNamed(
+          '/home', arguments: {'time': timer.time, 'location': timer.location});
+    });
   }
 
   @override
@@ -38,7 +48,7 @@ class _LocationState extends State<Location> {
               child: ListTile(
                 onTap: () {
                   setState(() {
-                    Navigator.of(context).pushReplacementNamed('/', arguments: {'timezone' : tz.timezones[index], 'location' : tz.locations[index]});
+                    newTime(index);
                   });
                 },
                 title: Padding(
