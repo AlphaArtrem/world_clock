@@ -8,11 +8,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  Map data;
+  Map data = {};
   double font = 65;
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context).settings.arguments;
+    data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
     if( data['time'] == "Can't Load Time"){
       font = 25;
     }
@@ -30,9 +30,14 @@ class _HomeState extends State<Home> {
             SizedBox(height: 5),
             Text('${data['location']}\n\n', style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 25, letterSpacing: 2),),
             RaisedButton.icon(
-              onPressed: (){
+              onPressed: () async{
+                dynamic result = await Navigator.pushNamed(context, '/location');
+                print(result);
                 setState(() {
-                  Navigator.pushNamed(context, '/location');
+                  data = {
+                    'time' : result['time'],
+                    'location' : result['location']
+                  };
                 });
               },
               icon: Icon(Icons.edit_location, color: Colors.white,),

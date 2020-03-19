@@ -15,12 +15,12 @@ class _LocationState extends State<Location> {
     tz.getTimeZones();
   }
 
-  void newTime(index) async {
+  void newTime(index, context) async {
     GetTime timer = GetTime(location: tz.locations[index], zone: tz.timezones[index]);
     await timer.getTime();
     setState(() {
-      Navigator.of(context).pushReplacementNamed(
-          '/home', arguments: {'time': timer.time, 'location': timer.location});
+      Navigator.pop(
+          context , {'time': timer.time, 'location': timer.location});
     });
   }
 
@@ -48,7 +48,7 @@ class _LocationState extends State<Location> {
               child: ListTile(
                 onTap: () {
                   setState(() {
-                    newTime(index);
+                    newTime(index, context);
                   });
                 },
                 title: Padding(
