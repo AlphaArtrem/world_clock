@@ -7,6 +7,7 @@ void main(){
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'World Clock',
+    initialRoute: '/',
     routes: {
       '/': (context) => Loading(),
       '/home': (context) => Home(),
