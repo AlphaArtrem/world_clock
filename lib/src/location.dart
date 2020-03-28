@@ -21,9 +21,10 @@ class _LocationState extends State<Location> {
   void newTime(index, context) async {
     GetTime timer = GetTime(location: locations[index], zone: zones[index]);
     await timer.getTime();
+    print(timer.now);
     setState(() {
       Navigator.pop(
-          context , {'time': timer.time, 'location': timer.location});
+          context , {'time': timer.time, 'location': timer.location, 'datetime' : timer.now});
     });
   }
 

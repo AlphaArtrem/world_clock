@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -7,7 +8,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  DateTime now;
   Map data = {};
   double font = 65;
   @override
@@ -16,38 +17,56 @@ class _HomeState extends State<Home> {
     if( data['time'] == "Can't Load Time"){
       font = 25;
     }
+    now = data['datetime'];
     return Scaffold(
       appBar: AppBar(
         title: Text('World Clock'),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('${data['time']}', style: TextStyle(color: Colors.deepPurpleAccent, fontSize: font),),
-            SizedBox(height: 5),
-            Text('${data['location']}\n\n', style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 25, letterSpacing: 2),),
-            RaisedButton.icon(
-              onPressed: () async{
-                dynamic result = await Navigator.pushNamed(context, '/location');
-                setState(() {
-                  data = {
-                    'time' : result['time'],
-                    'location' : result['location']
-                  };
-                });
-              },
-              icon: Icon(Icons.edit_location, color: Colors.white,),
-              label: Text('Change Location', style: TextStyle(color: Colors.white, fontSize: 18),),
-              color: Colors.deepPurpleAccent,
-              elevation: 20,
+      body: StreamBuilder(
+        stream: timeStream(),
+        builder: (context, snapshot) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('${data['time']}', style: TextStyle(color: Colors.deepPurpleAccent, fontSize: font),),
+                SizedBox(height: 5),
+                Text('${data['location']}\n\n', style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 25, letterSpacing: 2),),
+                RaisedButton.icon(
+                  onPressed: () async{
+                    dynamic result = await Navigator.pushNamed(context, '/location');
+                    setState(() {
+                      data = {
+                        'time' : result['time'],
+                        'location' : result['location'],
+                        'datetime' : result['datetime']
+                      };
+                    });
+                  },
+                  icon: Icon(Icons.edit_location, color: Colors.white,),
+                  label: Text('Change Location', style: TextStyle(color: Colors.white, fontSize: 18),),
+                  color: Colors.deepPurpleAccent,
+                  elevation: 20,
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
+  }
+
+  void updateTime(int i){
+    now = now.add(Duration(seconds : 1));
+    data['time'] = DateFormat.Hms().format(now);
+  }
+
+  Stream timeStream(){
+    Duration duration = Duration(seconds: 1);
+    Stream stream = Stream.periodic(duration, updateTime);
+    return stream;
   }
 }
 

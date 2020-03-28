@@ -6,6 +6,7 @@ class GetTime{
   String location;
   String time;
   String zone;
+  DateTime now;
 
   GetTime({this.location, this.zone});
 
@@ -18,11 +19,10 @@ class GetTime{
       String datetime = data['datetime'];
       int hoffset = int.parse(data['utc_offset'].substring(1,3));
       int moffset = int.parse(data['utc_offset'].substring(4,6));
-
-      DateTime now = DateTime.parse(datetime);
+      now = DateTime.parse(datetime);
       now = now.add(Duration(hours: hoffset, minutes: moffset));
 
-      time = DateFormat.jm().format(now);
+      time = DateFormat.Hms().format(now);
     }
     catch(e){
       time = "Can't Load Time";
