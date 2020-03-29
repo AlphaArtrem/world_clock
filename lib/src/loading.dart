@@ -14,7 +14,7 @@ class _LoadingState extends State<Loading> {
     GetTime timer = GetTime(location: 'India', zone: 'Asia/Kolkata');
     await timer.getTime();
     setState(() {
-      Navigator.of(context).pushReplacementNamed('/home', arguments: {'time': timer.time, 'location': timer.location, 'datetime': timer.now});
+      Navigator.of(context).pushReplacementNamed('/home', arguments: {'time': timer.time, 'location': timer.location, 'datetime' : timer.now});
     });
   }
 

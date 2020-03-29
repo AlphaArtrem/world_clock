@@ -10,7 +10,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   DateTime now;
   Map data = {};
-  double font = 65;
+  double font = 55;
+  bool twelveHour = false;
   @override
   Widget build(BuildContext context) {
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
@@ -23,6 +24,14 @@ class _HomeState extends State<Home> {
         title: Text('World Clock'),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.access_time),
+            onPressed: (){
+              twelveHour = !twelveHour;
+            },
+          )
+        ],
       ),
       body: StreamBuilder(
         stream: timeStream(),
@@ -60,7 +69,7 @@ class _HomeState extends State<Home> {
 
   void updateTime(int i){
     now = now.add(Duration(seconds : 1));
-    data['time'] = DateFormat.Hms().format(now);
+    data['time'] = twelveHour ? DateFormat.jms().format(now) : DateFormat.Hms().format(now);
   }
 
   Stream timeStream(){
